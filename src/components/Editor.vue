@@ -2,7 +2,7 @@
     <div id="editor">
         <nav>
             <ol>
-                <li v-for="i in [0,1,2,3,4,5]" v-bind:class="{active:currentTab === i}" v-on:click="currentTab = i">
+                <li v-for="i in tabCount" v-bind:class="{active:currentTab === i}" v-on:click="currentTab = i">
                     <svg class="icon">
                         <use v-bind:xlink:href="'#icon-'+icons[i]"></use>
                     </svg>                    
@@ -11,21 +11,14 @@
         </nav>
         <ol class="panels">
             <li v-bind:class="{active:currentTab === 0}">
-                <h2>个人信息</h2>
-                <el-form>
-                    <el-form-item label="姓名">
-                        <el-input v-model="profile.name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="城市">
-                        <el-input v-model="profile.city"></el-input>
-                    </el-form-item>
-                    <el-form-item label="出生年日">
-                        <el-input v-model="profile.birth"></el-input>
-                    </el-form-item>                                        
-                </el-form>
+
+                <ProfileEditor v-bind:profile="profile" />
+
             </li>
             <li v-bind:class="{active:currentTab === 1}">
-                <h2>工作经历</h2>
+
+                <WorkHistoryEditor v-bind:workHistory="workHistory"/>
+
             </li>
             <li v-bind:class="{active:currentTab === 2}">
                 <h2>学习经历</h2>
@@ -44,16 +37,36 @@
 </template>
 
 <script>
+import ProfileEditor from './ProfileEditor'
+import WorkHistoryEditor from './WorkHistoryEditor'
+
 export default {
+    components: {
+        ProfileEditor,
+        WorkHistoryEditor
+    },
     data(){
         return{
             currentTab: 0,
+            tabCount: this.initTabcount(),
             icons: ['sekuaibianxielianxiren','sekuaidiannao','icon-test1','icon-test','icon-test2','sekuaiyouxiji'],
             profile: {
                 name: '',
                 city: '',
                 birth: ''
+            },
+            workHistory: [
+                { company: '',content: '' }
+            ]
+        }
+    },
+    methods:{
+        initTabcount: function(){
+            let count = [];
+            for (let i = 0; i < 6; i++) {
+                count[i] = i;
             }
+            return count
         }
     }
 }
@@ -79,11 +92,31 @@ nav ol li.active{
 nav ol li.active .icon{
     fill: #000;
 }
+.panels{
+    overflow: auto;
+    flex: 1;
+}
+.panels li{
+    display: none;
+    padding: 32px;
+}
 .panels li.active{
     display: block;
 }
 .panels li el-form el-input{
     width: 100%;
     background-color: red;
+}
+.one-work-history{
+    position: relative;
+}
+.one-work-history .el-icon-close{
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 10px;
+    line-height: 20px;
+    z-index: 1;
+    cursor: pointer;
 }
 </style>
