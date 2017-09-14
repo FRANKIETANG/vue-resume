@@ -2,7 +2,7 @@
     <div id="editor">
         <nav>
             <ol>
-                <li v-for="i in tabCount" v-bind:class="{active:currentTab === i}" v-on:click="currentTab = i">
+                <li v-for="i in tabCount" v-bind:class="{active:currentTab === i}" v-on:click="currentTab = i" :key="i">
                     <svg class="icon">
                         <use v-bind:xlink:href="'#icon-'+icons[i]"></use>
                     </svg>                    
@@ -17,22 +17,28 @@
             </li>
             <li v-bind:class="{active:currentTab === 1}">
 
-                <WorkHistoryEditor v-bind:workHistory="workHistory"/>
+                <itemHistoryEditor v-bind:items="workHistory" v-bind:labels="{company:'公司',content:'工作内容'}" title="工作经历"/>
 
             </li>
             <li v-bind:class="{active:currentTab === 2}">
                 
-                <StudyHistoryEditor v-bind:studyHistory="studyHistory"/>
+                <itemHistoryEditor v-bind:items="studyHistory" v-bind:labels="{school:'学校',degree:'学历',duration:'时间'}" title="学习经历"/>
 
             </li>
             <li v-bind:class="{active:currentTab === 3}">
-                <h2>项目经历</h2>
+
+                <itemHistoryEditor v-bind:items="projects" v-bind:labels="{name:'项目经历',content:'项目内容'}" title="项目经历"/>
+            
             </li>
             <li v-bind:class="{active:currentTab === 4}">
-                <h2>获奖信息</h2>
+            
+                <itemHistoryEditor v-bind:items="awards" v-bind:labels="{name:'奖项'}" title="获奖信息"/>
+            
             </li>
             <li v-bind:class="{active:currentTab === 5}">
-                <h2>联系方式</h2>
+
+                <ContactsEditor v-bind:contacts="contacts"/>  
+            
             </li>                                                
         </ol>
     </div>
@@ -40,14 +46,14 @@
 
 <script>
 import ProfileEditor from './ProfileEditor'
-import WorkHistoryEditor from './WorkHistoryEditor'
-import StudyHistoryEditor from './StudyHistoryEditor'
+import itemHistoryEditor from './itemHistoryEditor'
+import ContactsEditor from './Contacts'
 
 export default {
     components: {
         ProfileEditor,
-        WorkHistoryEditor,
-        StudyHistoryEditor
+        itemHistoryEditor,
+        ContactsEditor
     },
     data(){
         return{
@@ -70,6 +76,25 @@ export default {
                     school: '',
                     degree: '',
                     duration: ''
+                }
+            ],
+            projects: [
+                {
+                    name: '',
+                    content: ''
+                }
+            ],
+            awards: [
+                {
+                    name: ''
+                }
+            ],
+            contacts: [
+                {
+                    phone: '',
+                    qq: '',
+                    wechat: '',
+                    email: ''
                 }
             ]
         }
