@@ -99,7 +99,7 @@ export default {
   box-shadow: 0 0 3px hsla(0, 0, 0, 0.5);
 }
 
-main {
+#app main {
   display: flex;
   flex: 1;
   background: #eee;
