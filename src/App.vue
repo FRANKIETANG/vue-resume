@@ -1,10 +1,11 @@
 <template>
-  <div id="app">
-    <Topbar class="topbar" />
+  <div id="app" v-bind:class="{previewMode:previewMode}">
+    <Topbar class="topbar" v-on:preview="enterPreview"/>
     <main>
       <Editor class="editor" v-bind:resume="resume"/>
       <Preview class="preview" v-bind:resume="resume"/>
     </main>
+    <el-button id="exit-preview" v-on:click="exitPreview">退出预览</el-button>
   </div>
 </template>
 
@@ -20,8 +21,17 @@ export default {
     Editor,
     Preview
   },
+  methods: {
+    enterPreview(){
+      this.previewMode = true
+    },
+    exitPreview(){
+      this.previewMode = false
+    }
+  },
   data() {
     return {
+      previewMode: false,
       resume: {
         profile: {
           name: '游戏的王者',
@@ -113,5 +123,29 @@ main {
   vertical-align: -0.15em;
   fill: currentColor;
   overflow: hidden;
+}
+
+.previewMode #topbar{
+  display: none;
+}
+
+.previewMode #editor{
+  display: none;
+}
+
+.previewMode #preview{
+  max-width: 800px;
+  margin: 10px auto;
+}
+
+#exit-preview {
+  display: none;
+}
+
+.previewMode #exit-preview{
+  display: block;
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
 }
 </style>
