@@ -65,6 +65,7 @@ export default {
     },
     created(){
         this.currentUser = this.getCurrentUser()
+        this.fetchResumeContent()
     },
     methods: {
         preview() {
@@ -106,11 +107,11 @@ export default {
                     this.resumeContent = JSON.parse(avResume.attributes.content)
                     console.log(this.resumeContent,3)
                     this.resumeContent.id = id
+                    this.$emit('updete:resume',this.resumeContent)
                 },function(error){
                     console.error(error)
                 })
             }
-            this.$emit('updete:resume',this.resumeContent)
         },
         logIn(){
             AV.User.logIn(this.loginForm.username,this.loginForm.password).then((loginedUser)=>{
