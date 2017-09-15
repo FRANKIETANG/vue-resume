@@ -4,13 +4,13 @@
             Resume
         </div>
         <div class="actions">
-            <el-button type="primary" @click="signUpDialogVisible = true">注册</el-button>
-            <el-button @click="loginDialogVisible = true">登录</el-button>
+            <el-button type="primary" @click="signUpDialogVisible = true" v-if="!currentUser">注册</el-button>
+            <el-button @click="loginDialogVisible = true" v-if="!currentUser">登录</el-button>
             <el-button v-on:click="preview">预览</el-button>
             <el-button>保存</el-button>
             <el-button>登出</el-button>
         </div>
-        <el-dialog class="singup" title="注册" :visible.sync="signUpDialogVisible" :modal-append-to-body="false">
+        <el-dialog v-if="!currentUser" class="singup" title="注册" :visible.sync="signUpDialogVisible" :modal-append-to-body="false">
             <el-form :model="form">
                 <el-form-item label="用户名">
                     <el-input v-model="form.username"></el-input>
@@ -21,7 +21,7 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="signUpDialogVisible = false">取消</el-button>
-                <el-button type="primary">注册</el-button>
+                <el-button type="primary" @click="signUp">注册</el-button>
             </div>
         </el-dialog>
         <el-dialog class="login" title="登录" :visible.sync="loginDialogVisible" :modal-append-to-body="false">
@@ -45,8 +45,10 @@
 import AV from '../lib/leancloud'
 
 export default {
-    data(){
+    props: ['resume'],
+    data() {
         return {
+            currentUser: null,
             signUpDialogVisible: false,
             loginDialogVisible: false,
             form: {
@@ -57,12 +59,39 @@ export default {
                 username: '',
                 password: ''
             },
-            formLabelWidth: '120px',
+            formLabelWidth: '120px'
         }
+    },
+    created(){
+        this.currentUser = this.getCurrentUser()
     },
     methods: {
         preview() {
             this.$emit('preview')
+        },
+        getCurrentUser() {
+            let current = AV.User.current()
+            if (current) {
+                let {id, createdAt,attributes:{username}} = AV.User.current()
+                return {id, username, createdAt}
+            } else {
+                return null
+            }
+        },
+        signUp() {
+            this.signUpDialogVisible = false
+            let user = new AV.User()
+            // 设置用户名
+            user.setUsername(this.form.username)
+            // 设置密码
+            user.setPassword(this.form.password)
+
+            user.signUp().then((loginedUser) => {
+                console.log(loginedUser)
+                this.currentUser = this.getCurrentUser()
+            },function(error){
+                console.log('注册失败')
+            })
         }
     }
 }
