@@ -7,7 +7,7 @@
             <el-button type="primary" @click="signUpDialogVisible = true" v-if="!currentUser">注册</el-button>
             <el-button @click="loginDialogVisible = true" v-if="!currentUser">登录</el-button>
             <el-button v-on:click="preview">预览</el-button>
-            <el-button v-if="currentUser">保存</el-button>
+            <el-button @click="saveOrUpdateResume" v-if="currentUser">保存</el-button>
             <el-button @click="logOut" v-if="currentUser">登出</el-button>
         </div>
         <el-dialog v-if="!currentUser" class="singup" title="注册" :visible.sync="signUpDialogVisible" :modal-append-to-body="false">
@@ -59,7 +59,8 @@ export default {
                 username: '',
                 password: ''
             },
-            formLabelWidth: '120px'
+            formLabelWidth: '120px',
+            resumeContent: ''
         }
     },
     created(){
@@ -93,10 +94,29 @@ export default {
                 console.log('注册失败')
             })
         },
+        fetchResumeContent(){
+            if(this.currentUser){
+                var query = new AV.Query('Resumefolder')
+                console.log(query.length,1)
+                query.find().then((resume)=>{
+                    console.log(resume,2)
+                    console.log(resume.length)
+                    let avResume = resume[0]
+                    let id = avResume.id
+                    this.resumeContent = JSON.parse(avResume.attributes.content)
+                    console.log(this.resumeContent,3)
+                    this.resumeContent.id = id
+                },function(error){
+                    console.error(error)
+                })
+            }
+            this.$emit('updete:resume',this.resumeContent)
+        },
         logIn(){
             AV.User.logIn(this.loginForm.username,this.loginForm.password).then((loginedUser)=>{
                 this.currentUser = this.getCurrentUser()
-                this.loginDialogVisible = false;
+                this.loginDialogVisible = false
+                this.fetchResumeContent()
             },function(error){
                 console.log('登录失败')
             })
@@ -106,6 +126,42 @@ export default {
             this.currentUser = null
             //强行刷新一次页面退回最初状态
             window.location.reload()
+        },
+        saveOrUpdateResume(){
+            if(this.resume.id){
+                this.updateResumeContent()
+            }else{
+                this.saveResumeContent()
+            }
+        },
+        saveResumeContent(){
+            let session = JSON.stringify(this.resume)
+            var Resumefolder = AV.Object.extend('Resumefolder')
+            var resumefolder = new Resumefolder()
+
+            //设置当前登录用户读写
+            var acl = new AV.ACL()
+            acl.setReadAccess(AV.User.current(),true)
+            acl.getWriteAccess(AV.User.current(),true)
+
+            resumefolder.set('content',session)
+
+            resumefolder.setACL(acl)
+
+            resumefolder.save().then((resume)=>{
+                this.resume.id = resume.id
+                console.log('保存成功')
+            },function(error){
+                alert('保存失败')
+            })
+        },
+        updateResumeContent(){
+            let session = JSON.stringify(thie.resume)
+            let avResume = AV.Object.createWithoutData('Resumefolder',this.resume.id)
+            avResume.set('content',session)
+            avResume.save().then(()=>{
+                console.log('更新成功')
+            })
         }
     }
 }

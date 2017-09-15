@@ -1,6 +1,6 @@
 <template>
   <div id="app" v-bind:class="{previewMode:previewMode}">
-    <Topbar class="topbar" v-on:preview="enterPreview"/>
+    <Topbar class="topbar" v-on:preview="enterPreview" :resume.sync="resume"/>
     <main>
       <Editor class="editor" v-bind:resume="resume"/>
       <Preview class="preview" v-bind:resume="resume"/>
