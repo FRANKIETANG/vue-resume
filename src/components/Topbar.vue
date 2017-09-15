@@ -35,7 +35,7 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="loginDialogVisible = false">取消</el-button>
-                <el-button type="primary">登录</el-button>
+                <el-button type="primary" @click="logIn">登录</el-button>
             </div>
         </el-dialog>        
     </div>
@@ -91,6 +91,14 @@ export default {
                 this.currentUser = this.getCurrentUser()
             },function(error){
                 console.log('注册失败')
+            })
+        },
+        logIn(){
+            AV.User.logIn(this.loginForm.username,this.loginForm.password).then((loginedUser)=>{
+                this.currentUser = this.getCurrentUser()
+                this.loginDialogVisible = false;
+            },function(error){
+                console.log('登录失败')
             })
         }
     }
