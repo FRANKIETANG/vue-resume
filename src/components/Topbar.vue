@@ -7,8 +7,8 @@
             <el-button type="primary" @click="signUpDialogVisible = true" v-if="!currentUser">注册</el-button>
             <el-button @click="loginDialogVisible = true" v-if="!currentUser">登录</el-button>
             <el-button v-on:click="preview">预览</el-button>
-            <el-button>保存</el-button>
-            <el-button>登出</el-button>
+            <el-button v-if="currentUser">保存</el-button>
+            <el-button @click="logOut" v-if="currentUser">登出</el-button>
         </div>
         <el-dialog v-if="!currentUser" class="singup" title="注册" :visible.sync="signUpDialogVisible" :modal-append-to-body="false">
             <el-form :model="form">
@@ -100,6 +100,12 @@ export default {
             },function(error){
                 console.log('登录失败')
             })
+        },
+        logOut(){
+            AV.User.logOut()
+            this.currentUser = null
+            //强行刷新一次页面退回最初状态
+            window.location.reload()
         }
     }
 }
