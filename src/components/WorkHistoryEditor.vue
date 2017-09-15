@@ -20,14 +20,14 @@
 export default {
     props: ['workHistory'],
     methods: {
-        addWorkHistory(){
+        addWorkHistory() {
             this.workHistory.push({
                 company: '',
                 content: ''
             })
         },
-        removeWorkHistory(index){
-            this.workHistory.splice(index,1)
+        removeWorkHistory(index) {
+            this.workHistory.splice(index, 1)
         }
     }
 }

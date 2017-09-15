@@ -15,22 +15,22 @@
 
 <script>
 export default {
-    props: ['items','labels','title'],
+    props: ['items', 'labels', 'title'],
     computed: {
-        keys(){
+        keys() {
             return (Object.keys(this.items[0]))
         }
     },
     methods: {
-        addItem(){
+        addItem() {
             const empty = {}
-            this.keys.map((key)=>{
+            this.keys.map((key) => {
                 empty[key] = ''
             })
             this.items.push(empty)
         },
-        removeItem(index){
-            this.items.splice(index,1)
+        removeItem(index) {
+            this.items.splice(index, 1)
         }
     }
 }

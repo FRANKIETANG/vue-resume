@@ -1,11 +1,16 @@
 <template>
   <div id="app" v-bind:class="{previewMode:previewMode}">
-    <Topbar class="topbar" v-on:preview="enterPreview" :resume.sync="resume"/>
+    <Topbar class="topbar" v-on:preview="enterPreview" :resume.sync="resume" />
     <main>
-      <Editor class="editor" v-bind:resume="resume"/>
-      <Preview class="preview" v-bind:resume="resume"/>
+      <Editor class="editor" v-bind:resume="resume" />
+      <Preview class="preview" v-bind:resume="resume" />
     </main>
-    <el-button id="exit-preview" v-on:click="exitPreview">退出预览</el-button>
+    <div id="exit-preview" v-on:click="exitPreview">
+      <svg class="icon" aria-hidden="true">
+        <use xlink:href="#icon-egg-incubator"></use>
+      </svg>
+    </div>
+    <!-- <el-button id="exit-preview" v-on:click="exitPreview">退出预览</el-button> -->
   </div>
 </template>
 
@@ -22,10 +27,10 @@ export default {
     Preview
   },
   methods: {
-    enterPreview(){
+    enterPreview() {
       this.previewMode = true
     },
-    exitPreview(){
+    exitPreview() {
       this.previewMode = false
     }
   },
@@ -35,25 +40,39 @@ export default {
       resume: {
         profile: {
           name: '游戏的王者',
-          city: '木叶村',
-          title: '我要成为海贼王的男人',
-          birth: '1995-12-30'
+          position: '火影',
+          title: '我要成为海贼王的男人'
         },
         workHistory: [
           {
             company: '美国白宫',
+            addr: 'Washington DC',
+            duration: '无期限',
+            name: '总统',
             content: '搞死了记者和自己提拔的州长，怼走了总统，从党鞭当上了总统'
           },
           {
             company: '房车',
+            addr: 'New Mexico',
+            duration: '8年',
+            name: '高中化学老师',
             content: '我有个名字叫 Heisenberg，搞死了所有的竞争对手，New Mexico 最大的毒枭'
           }
         ],
         studyHistory: [
           {
             school: 'House of Black and White',
-            degree: '高中',
-            duration: 'No one know'
+            degree: '没有',
+            duration: '1年',
+            name: '刺客',
+            contacts: '怎么换人脸'
+          },
+          {
+            school: 'King\'s Landing 的小房子',
+            degree: '没有',
+            duration: '1年',
+            name: '跳舞',
+            contacts: '一个操着西班牙口音的老师教的'
           }
         ],
         projects: [
@@ -68,14 +87,10 @@ export default {
             content: '以破纪录的压缩成绩获得了冠军'
           }
         ],
-        contacts: [
-          {
-            phone: '123',
-            qq: '456',
-            wechat: '789',
-            email: '1234567'
-          }
-        ]
+        contacts: {
+          phone: '123123123123',
+          email: '1234567@123.123'
+        }
       }
     }
   }
@@ -96,6 +111,8 @@ export default {
 .topbar {
   position: relative;
   z-index: 1;
+  color: #fff;
+  background: rgb(78, 145, 255);
   box-shadow: 0 0 3px hsla(0, 0, 0, 0.5);
 }
 
@@ -125,15 +142,15 @@ export default {
   overflow: hidden;
 }
 
-.previewMode #topbar{
+.previewMode #topbar {
   display: none;
 }
 
-.previewMode #editor{
+.previewMode #editor {
   display: none;
 }
 
-.previewMode #preview{
+.previewMode #preview {
   max-width: 800px;
   margin: 10px auto;
 }
@@ -142,7 +159,7 @@ export default {
   display: none;
 }
 
-.previewMode #exit-preview{
+.previewMode #exit-preview {
   display: block;
   position: fixed;
   right: 20px;

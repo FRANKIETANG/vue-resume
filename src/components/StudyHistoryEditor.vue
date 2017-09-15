@@ -5,17 +5,17 @@
             <div v-for="(item,index) in studyHistory" class="one-work-history">
                 <i v-on:click="removeStudyHistory(index)" class="el-icon-close"></i>
                 <el-form-item label="学校">
-                        <el-input v-model="studyHistory.school"/></el-input>
+                    <el-input v-model="studyHistory.school" /></el-input>
                 </el-form-item>
                 <el-form-item label="学历">
-                        <el-input v-model="studyHistory.degree"/></el-input>
+                    <el-input v-model="studyHistory.degree" /></el-input>
                 </el-form-item>
                 <el-form-item label="时间">
-                        <el-input v-model="studyHistory.duration"/></el-input>
-                </el-form-item>                                
+                    <el-input v-model="studyHistory.duration" /></el-input>
+                </el-form-item>
             </div>
             <el-button type="primary" v-on:click="addStudyHistory">添加</el-button>
-        </el-form> 
+        </el-form>
     </div>
 </template>
 
@@ -23,15 +23,15 @@
 export default {
     props: ["studyHistory"],
     methods: {
-        addStudyHistory(){
+        addStudyHistory() {
             this.studyHistory.push({
                 school: '',
                 degree: '',
                 duration: ''
             })
         },
-        removeStudyHistory(index){
-            this.studyHistory.splice(index,1)
+        removeStudyHistory(index) {
+            this.studyHistory.splice(index, 1)
         }
     },
 }
